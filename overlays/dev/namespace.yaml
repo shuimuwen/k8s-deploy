@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: login-demo-dev
+  labels:
+    app.kubernetes.io/part-of: login-demo
+    environment: dev
