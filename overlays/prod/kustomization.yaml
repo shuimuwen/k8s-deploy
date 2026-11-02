@@ -1,0 +1,48 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: login-demo-prod
+resources:
+- ../../base
+- namespace.yaml
+images:
+- name: backend
+  newName: ghcr.io/shuimuwen/backend
+  newTag: SET_ME
+- name: frontend
+  newName: ghcr.io/shuimuwen/frontend
+  newTag: SET_ME
+replicas:
+- name: frontend
+  count: 2
+patches:
+- patch: |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: backend
+    spec:
+      template:
+        spec:
+          containers:
+          - name: backend
+            env:
+            - name: APP_ENV
+              value: prod
+            resources:
+              limits:
+                cpu: 1000m
+                memory: 512Mi
+- patch: |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: frontend
+    spec:
+      template:
+        spec:
+          containers:
+          - name: frontend
+            resources:
+              limits:
+                cpu: 1000m
+                memory: 512Mi
